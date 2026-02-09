@@ -335,7 +335,7 @@ const DEPARTMENTS = [
     mos: [
       { name: "Lord Vallance", title: "Minister of State (Science, Innovation, Research & Nuclear)", rt: false },
       { name: "Michael Shanks MP", title: "Minister of State (Energy)", rt: false },
-      { name: "Dr Alan Whitehead CBE", title: "Minister of State (Energy Security & Net Zero)", rt: false, note: "Unpaid" },
+      { name: "Lord Whitehead", title: "Minister of State (Energy Security & Net Zero)", rt: false, note: "Unpaid" },
     ],
     puss: [
       { name: "Katie White OBE MP", title: "PUSS (Climate)" },
@@ -381,6 +381,7 @@ const DEPARTMENTS = [
     puss: [
       { name: "Baroness Lloyd of Effra CBE", title: "PUSS (Digital Economy)", note: "Paid as whip" },
       { name: "Kanishka Narayan MP", title: "PUSS (AI & Online Safety)" },
+      { name: "Josh Simons MP", title: "PUSS (Department for Science, Innovation and Technology)" },
     ],
   },
   {
@@ -397,7 +398,7 @@ const DEPARTMENTS = [
   },
   {
     id: "defra", name: "Department for Environment, Food & Rural Affairs", shortName: "Defra", color: "#00703c",
-    secretary: { name: "Emma Reynolds MP", title: "Secretary of State for Environment, Food and Rural Affairs", rt: false },
+    secretary: { name: "Emma Reynolds MP", title: "Secretary of State for Environment, Food and Rural Affairs", rt: true },
     mos: [
       { name: "Dame Angela Eagle DBE MP", title: "Minister of State (Food Security & Rural Affairs)", rt: false },
     ],
@@ -434,7 +435,10 @@ const DEPARTMENTS = [
     id: "wales", name: "Wales Office", color: "#a33038",
     secretary: { name: "Jo Stevens MP", title: "Secretary of State for Wales", rt: true },
     mos: [],
-    puss: [{ name: "Nia Griffith MP", title: "PUSS" }],
+    puss: [
+      { name: "Anna McMorrin MP", title: "Parliamentary Under-Secretary of State for Wales" },
+      { name: "Claire Hughes MP", title: "Parliamentary Under-Secretary of State in the Wales Office, Assistant Whip, House of Commons" },
+    ],
   },
 ];
 
@@ -538,7 +542,7 @@ const WEALTH_EST = {
   // DESNZ
   "Lord Vallance": 5000000,                 // Former GSK executive (president R&D), chief sci adviser
   "Michael Shanks MP": 500000,              // New MP 2023
-  "Dr Alan Whitehead CBE": 1200000,         // Academic, former MP 1997-2024
+  "Lord Whitehead": 1200000,                // Academic, former MP 1997-2024, now peer
   "Katie White OBE MP": 500000,             // New MP 2024
   "Martin McCluskey MP": 400000,            // New MP 2024
   "Chris McDonald MP": 700000,              // Materials Processing Institute CEO
@@ -570,7 +574,8 @@ const WEALTH_EST = {
   // NIO/Scotland/Wales
   "Matthew Patrick MP": 400000,             // New MP 2024
   "Kirsty McNeill MP": 500000,              // Charity sector, new MP 2024
-  "Nia Griffith MP": 1000000,               // MP since 2005
+  "Anna McMorrin MP": 800000,               // MP since 2017, solicitor background
+  "Claire Hughes MP": 500000,               // New MP 2024
   // Law officers
   "Ellie Reeves MP": 1500000,               // Solicitor, MP since 2017, sister of Rachel Reeves
 };
@@ -657,7 +662,8 @@ const MP_INFO = {
   "Stephanie Peacock MP": { con: "Barnsley South", maj: 8980, parlId: 4607 },
   "Matthew Patrick MP": { con: "Lewisham West and East Dulwich", maj: 19376, parlId: 5070 },
   "Kirsty McNeill MP": { con: "Midlothian", maj: 5832, parlId: 5071 },
-  "Nia Griffith MP": { con: "Llanelli", maj: 9883, parlId: 1541 },
+  "Anna McMorrin MP": { con: "Cardiff North", maj: 10279, parlId: 4632 },
+  "Claire Hughes MP": { con: "Bangor Aberconwy", maj: 3378, parlId: 5072 },
   "Sir Alan Campbell MP": { con: "Tynemouth", maj: 17291, parlId: 328 },
   "Ellie Reeves MP": { con: "Lewisham North", maj: 19854, parlId: 4620 },
   // Lords (no constituency)
@@ -673,7 +679,7 @@ const MP_INFO = {
   "Baroness Merron": { parlId: null },
   "Baroness Smith of Malvern": { parlId: null },
   "Lord Vallance": { parlId: null },
-  "Dr Alan Whitehead CBE": { parlId: null },
+  "Lord Whitehead": { parlId: null },
   "Baroness Sherlock OBE": { parlId: null },
   "Baroness Lloyd of Effra CBE": { parlId: null },
   "Lord Hendy of Richmond Hill CBE": { parlId: null },
@@ -935,7 +941,8 @@ function render() {
       <div>
         <div class="whip-column-title">House of Commons</div>
         ${ministerHTML({ name: "Jonathan Reynolds MP", title: "Parliamentary Secretary to the Treasury (Chief Whip)", rt: true }, "secretary", "#1a1a2e")}
-        ${ministerHTML({ name: "Sir Nic Dakin MP", title: "Vice Chamberlain of HM Household (Deputy Chief Whip)", rt: false }, "mos", "#1a1a2e")}
+        ${ministerHTML({ name: "Sir Mark Tami MP", title: "Treasurer of HM Household (Deputy Chief Whip)", rt: false }, "mos", "#1a1a2e")}
+        ${ministerHTML({ name: "Sir Nic Dakin MP", title: "Vice Chamberlain of HM Household (Government Whip)", rt: false }, "mos", "#1a1a2e")}
         <div class="whip-note">Plus Lords Commissioners of the Treasury and Assistant Whips</div>
       </div>
       <div>
