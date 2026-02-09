@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UK Government Ministerial Org Chart — February 2026</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@300;400;500;600;700;800;900&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Source Sans 3', 'Segoe UI', system-ui, sans-serif;
+    background: #f0f2f5;
+    color: #1a1a2e;
+    min-height: 100vh;
+    padding: 20px;
+  }
+
+  .container { max-width: 1100px; margin: 0 auto; }
+
+  /* Header */
+  .header { text-align: center; margin-bottom: 24px; }
+  .header-row { display: flex; justify-content: center; align-items: center; gap: 12px; margin-bottom: 8px; }
+  .crown-icon { width: 36px; height: 36px; background: #1a1a2e; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+  .header h1 { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; color: #1a1a2e; }
+  .header .subtitle { font-size: 12px; color: #5a6577; margin: 4px 0 0; }
+  .header .source { font-size: 10px; color: #8a94a6; margin: 2px 0 0; }
+
+  /* Hierarchy Key */
+  .key-box {
+    background: #fff; border: 1px solid #e2e4e9; border-radius: 8px;
+    padding: 14px 18px; margin-bottom: 16px; position: relative;
+  }
+  .key-box.hidden { display: none; }
+  .key-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #5a6577; margin-bottom: 10px; }
+  .key-items { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 11px; }
+  .key-item { display: flex; align-items: center; gap: 6px; }
+  .key-dot { width: 8px; height: 8px; border-radius: 2px; flex-shrink: 0; }
+  .key-label { font-weight: 600; }
+  .key-desc { color: #8a94a6; }
+  .key-footer { margin-top: 8px; font-size: 10px; color: #8a94a6; border-top: 1px solid #f0f0f0; padding-top: 6px; }
+  .close-btn { position: absolute; top: 8px; right: 12px; background: none; border: none; cursor: pointer; color: #aaa; font-size: 14px; }
+
+  /* Controls */
+  .controls { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; align-items: center; }
+  .search-input {
+    flex: 1; min-width: 200px; padding: 8px 12px;
+    border: 1px solid #d1d5db; border-radius: 6px; font-size: 12px;
+    outline: none; background: #fff; font-family: inherit;
+  }
+  .search-input:focus { border-color: #1a1a2e; box-shadow: 0 0 0 2px rgba(26,26,46,0.08); }
+  .ctrl-btn {
+    padding: 8px 14px; border: 1px solid #d1d5db; border-radius: 6px;
+    font-size: 11px; font-weight: 600; background: #fff; cursor: pointer;
+    color: #333; font-family: inherit; transition: background 0.15s;
+  }
+  .ctrl-btn:hover { background: #f5f6f8; }
+
+  /* PM Card */
+  .pm-card {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    color: #fff; padding: 16px 20px; border-radius: 10px;
+    margin-bottom: 16px; box-shadow: 0 4px 12px rgba(26,26,46,0.2);
+  }
+  .pm-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; opacity: 0.6; margin-bottom: 6px; }
+  .pm-name { font-size: 18px; font-weight: 800; letter-spacing: -0.3px; }
+  .pm-titles { font-size: 11px; opacity: 0.65; margin-top: 4px; }
+
+  /* Cross-cutting */
+  .cross-box {
+    background: #fff; border: 1px solid #e2e4e9; border-radius: 8px;
+    padding: 12px 14px; margin-bottom: 16px;
+  }
+  .section-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #5a6577; margin-bottom: 8px; }
+  .cross-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 4px; }
+
+  /* Departments Grid */
+  .dept-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    gap: 10px; margin-bottom: 16px;
+  }
+
+  /* Department Block */
+  .dept-block {
+    border: 1px solid #e2e4e9; border-radius: 8px; overflow: hidden;
+    background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  }
+  .dept-header {
+    color: #fff; padding: 10px 14px; cursor: pointer;
+    display: flex; justify-content: space-between; align-items: center; user-select: none;
+  }
+  .dept-header:hover { filter: brightness(1.05); }
+  .dept-name { font-size: 13px; font-weight: 700; letter-spacing: -0.2px; }
+  .dept-fullname { font-size: 10px; opacity: 0.8; margin-top: 1px; }
+  .dept-meta { display: flex; align-items: center; gap: 8px; }
+  .dept-count { font-size: 10px; opacity: 0.75; background: rgba(255,255,255,0.15); padding: 2px 8px; border-radius: 10px; }
+  .dept-arrow { font-size: 16px; transition: transform 0.2s; }
+  .dept-arrow.open { transform: rotate(180deg); }
+  .dept-body { padding: 8px; display: none; }
+  .dept-body.open { display: block; }
+
+  /* Rank Labels */
+  .rank-label {
+    font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
+    padding: 4px 4px 2px; border-bottom: 1px solid #eee; margin-bottom: 2px;
+  }
+  .rank-label.secretary { border-bottom-color: currentColor; }
+  .rank-label.mos { color: #5a6577; }
+  .rank-label.puss { color: #8a94a6; }
+  .rank-section { margin-bottom: 6px; }
+
+  /* Minister Card */
+  .minister-card {
+    padding: 8px 12px; margin-bottom: 4px; border-radius: 4px; transition: box-shadow 0.15s;
+  }
+  .minister-card:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+  .minister-card.secretary { border-left-width: 4px; border-left-style: solid; background: #fff; }
+  .minister-card.mos { border-left-width: 3px; border-left-style: solid; background: #fafbfc; }
+  .minister-card.puss { border-left-width: 2px; border-left-style: solid; background: #f5f6f8; }
+  .minister-name { font-size: 12px; font-weight: 500; color: #1a1a2e; line-height: 1.3; }
+  .minister-card.secretary .minister-name { font-size: 13px; font-weight: 700; }
+  .minister-rt { color: #888; font-size: 10px; margin-right: 3px; }
+  .minister-title { font-size: 10.5px; color: #5a6577; margin-top: 2px; line-height: 1.35; }
+
+  /* Badges */
+  .badge {
+    display: inline-block; font-size: 9px; font-weight: 600; letter-spacing: 0.5px;
+    text-transform: uppercase; padding: 2px 6px; border-radius: 3px;
+    margin-left: 6px; vertical-align: middle;
+  }
+  .badge.unpaid { background: #fff3cd; color: #856404; }
+  .badge.cabinet { background: #d4edda; color: #155724; }
+  .badge.whip { background: #e2e3e5; color: #383d41; }
+
+  /* Whips */
+  .whips-box {
+    background: #fff; border: 1px solid #e2e4e9; border-radius: 8px;
+    padding: 14px 18px; margin-bottom: 16px;
+  }
+  .whips-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; }
+  .whip-column-title {
+    font-size: 10px; font-weight: 700; color: #1a1a2e; text-transform: uppercase;
+    letter-spacing: 0.8px; margin-bottom: 6px; border-bottom: 2px solid #1a1a2e; padding-bottom: 3px;
+  }
+  .whip-note { font-size: 10px; color: #8a94a6; padding: 4px 6px; font-style: italic; }
+  .lords-whip {
+    padding: 5px 10px; font-size: 11.5px; border-radius: 3px; margin-bottom: 2px;
+  }
+  .lords-whip.senior { color: #1a1a2e; font-weight: 600; background: #f5f6f8; border-left: 3px solid #1a1a2e; }
+  .lords-whip.junior { color: #5a6577; font-weight: 400; border-left: 2px solid #ddd; }
+
+  /* Wealth percentile badge */
+  .wealth-badge {
+    display: inline-flex; align-items: center; gap: 3px;
+    font-size: 9px; font-weight: 700; letter-spacing: 0.3px;
+    padding: 2px 6px; border-radius: 3px; margin-left: 4px;
+    vertical-align: middle; cursor: help; position: relative;
+  }
+  .wealth-badge .wb-icon { font-size: 8px; }
+  .wb-top1 { background: #fde8e8; color: #991b1b; }
+  .wb-top5 { background: #fef3c7; color: #92400e; }
+  .wb-top10 { background: #fef9c3; color: #854d0e; }
+  .wb-top25 { background: #ecfdf5; color: #065f46; }
+  .wb-top50 { background: #f0f9ff; color: #1e40af; }
+  .wb-unknown { background: #f3f4f6; color: #9ca3af; }
+  .wealth-note-box {
+    background: #fffbeb; border: 1px solid #fde68a; border-radius: 8px;
+    padding: 12px 16px; margin-bottom: 16px; font-size: 11px; line-height: 1.5; color: #92400e;
+  }
+  .wealth-note-box strong { color: #78350f; }
+  .wealth-toggle { margin-left: 4px; }
+
+  /* Constituency info line */
+  .minister-constituency {
+    font-size: 10px; color: #8a94a6; margin-top: 2px; line-height: 1.3;
+  }
+  .minister-constituency a {
+    color: #1d70b8; text-decoration: none; font-weight: 500;
+  }
+  .minister-constituency a:hover { text-decoration: underline; }
+  .majority-safe { color: #065f46; }
+  .majority-marginal { color: #b45309; }
+  .majority-vulnerable { color: #991b1b; font-weight: 600; }
+  /* Dept budget tag in header */
+  .dept-budget {
+    font-size: 10px; color: rgba(255,255,255,0.85); font-weight: 400;
+    margin-top: 2px;
+  }
+
+  /* Footer */
+  .footer {
+    text-align: center; font-size: 10px; color: #8a94a6;
+    padding: 12px; border-top: 1px solid #e2e4e9; line-height: 1.5;
+  }
+
+  @media (max-width: 720px) {
+    .dept-grid { grid-template-columns: 1fr; }
+    .key-items { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container" id="app"></div>
+
+<script>
+// ─── DATA ───────────────────────────────────────────────────────────
+const DEPARTMENTS = [
+  {
+    id: "cabinet-office", name: "Cabinet Office", color: "#1d4e89",
+    secretary: { name: "Sir Keir Starmer KCB KC MP", title: "Prime Minister, First Lord of the Treasury, Minister for the Civil Service, Minister for the Union", rt: true },
+    mos: [
+      { name: "Darren Jones MP", title: "Chief Secretary to the PM, Chancellor of the Duchy of Lancaster, Minister for Intergovernmental Relations", rt: true },
+      { name: "Nick Thomas-Symonds MP", title: "Paymaster General, Minister for the Cabinet Office (Constitution & EU Relations)", rt: true },
+      { name: "Dan Jarvis MBE MP", title: "Minister of State", rt: false },
+      { name: "Anna Turley MP", title: "Minister of State (Minister without Portfolio)", rt: true, note: "Unpaid" },
+    ],
+    puss: [
+      { name: "Chris Ward MP", title: "Parliamentary Secretary" },
+      { name: "Satvir Kaur MP", title: "Parliamentary Secretary", note: "Unpaid" },
+      { name: "Josh Simons MP", title: "Parliamentary Secretary" },
+    ],
+  },
+  {
+    id: "treasury", name: "HM Treasury", color: "#8b1a1a",
+    secretary: { name: "Rachel Reeves MP", title: "Chancellor of the Exchequer", rt: true },
+    mos: [
+      { name: "James Murray MP", title: "Chief Secretary to the Treasury", rt: false, note: "Attends Cabinet" },
+      { name: "Lord Livermore", title: "Financial Secretary to the Treasury", rt: false },
+      { name: "Lord Stockwood", title: "Minister of State (Minister for Investment)", rt: false, note: "Unpaid" },
+    ],
+    puss: [
+      { name: "Daniel Tomlinson MP", title: "Exchequer Secretary to the Treasury" },
+      { name: "Lucy Rigby KC MP", title: "Economic Secretary to the Treasury" },
+      { name: "Torsten Bell MP", title: "Parliamentary Secretary" },
+    ],
+  },
+  {
+    id: "fcdo", name: "Foreign, Commonwealth & Development Office", shortName: "FCDO", color: "#003078",
+    secretary: { name: "Yvette Cooper MP", title: "Secretary of State for Foreign, Commonwealth and Development Affairs", rt: true },
+    mos: [
+      { name: "Baroness Chapman of Darlington", title: "Minister of State (International Development & Africa)", rt: true, note: "Attends Cabinet" },
+      { name: "Stephen Doughty MP", title: "Minister of State (Europe, North America & Overseas Territories)", rt: false },
+    ],
+    puss: [
+      { name: "Hamish Falconer MP", title: "PUSS (Middle East, N. Africa, Afghanistan & Pakistan)" },
+      { name: "Seema Malhotra MP", title: "PUSS (Indo-Pacific)" },
+      { name: "Chris Elmore MP", title: "PUSS (Multilateral, Human Rights, Latin America & Caribbean)" },
+    ],
+  },
+  {
+    id: "home", name: "Home Office", color: "#732282",
+    secretary: { name: "Shabana Mahmood MP", title: "Secretary of State for the Home Department", rt: true },
+    mos: [
+      { name: "Dan Jarvis MBE MP", title: "Minister of State (Security)", rt: false },
+      { name: "Lord Hanson of Flint", title: "Minister of State (Lords Minister)", rt: true, note: "Unpaid" },
+      { name: "Sarah Jones MP", title: "Minister of State (Policing & Crime)", rt: false },
+      { name: "Alex Norris MP", title: "Minister of State (Border Security & Asylum)", rt: false },
+    ],
+    puss: [
+      { name: "Jess Phillips MP", title: "PUSS (Safeguarding & VAWG)" },
+      { name: "Mike Tapp MP", title: "PUSS (Migration & Citizenship)" },
+    ],
+  },
+  {
+    id: "mod", name: "Ministry of Defence", shortName: "MoD", color: "#4a4a4a",
+    secretary: { name: "John Healey MP", title: "Secretary of State for Defence", rt: true },
+    mos: [
+      { name: "Luke Pollard MP", title: "Minister of State (Defence Readiness & Industry)", rt: false },
+      { name: "Lord Coaker", title: "Minister of State (House of Lords)", rt: false },
+    ],
+    puss: [
+      { name: "Alistair Carns DSO OBE MC MP", title: "PUSS (Armed Forces)" },
+      { name: "Louise Sandher-Jones MP", title: "PUSS (Veterans & People)" },
+    ],
+  },
+  {
+    id: "moj", name: "Ministry of Justice", shortName: "MoJ", color: "#231f20",
+    secretary: { name: "David Lammy MP", title: "Deputy PM, Lord Chancellor & Secretary of State for Justice", rt: true },
+    mos: [
+      { name: "Lord Timpson OBE", title: "Minister of State (Prisons, Probation & Reducing Reoffending)", rt: false, note: "Unpaid" },
+      { name: "Sarah Sackman KC MP", title: "Minister of State (Courts & Legal Services)", rt: false },
+    ],
+    puss: [
+      { name: "Alex Davies-Jones MP", title: "PUSS (Victims & Tackling VAWG)" },
+      { name: "Baroness Levitt KC", title: "PUSS & Lords Minister", note: "Unpaid" },
+      { name: "Jake Richards MP", title: "PUSS (Sentencing, Youth Justice & International)", note: "Paid as whip" },
+    ],
+  },
+  {
+    id: "mhclg", name: "Ministry of Housing, Communities & Local Government", shortName: "MHCLG", color: "#f47738",
+    secretary: { name: "Steve Reed OBE MP", title: "Secretary of State for Housing, Communities and Local Government", rt: true },
+    mos: [
+      { name: "Matthew Pennycook MP", title: "Minister of State (Housing & Planning)", rt: false },
+      { name: "Alison McGovern MP", title: "Minister of State (Local Government & Homelessness)", rt: false },
+    ],
+    puss: [
+      { name: "Baroness Taylor of Stevenage", title: "PUSS (Lords Minister for Housing & LG)", note: "Paid as whip" },
+      { name: "Miatta Fahnbulleh MP", title: "PUSS (Devolution, Faith & Communities)" },
+      { name: "Samantha Dixon MBE MP", title: "PUSS (Building Safety, Fire & Democracy)" },
+    ],
+  },
+  {
+    id: "dhsc", name: "Department of Health & Social Care", shortName: "DHSC", color: "#00703c",
+    secretary: { name: "Wes Streeting MP", title: "Secretary of State for Health and Social Care", rt: true },
+    mos: [
+      { name: "Karin Smyth MP", title: "Minister of State for Health (Secondary Care)", rt: false },
+      { name: "Stephen Kinnock MP", title: "Minister of State for Care", rt: false },
+    ],
+    puss: [
+      { name: "Baroness Merron", title: "PUSS (Women\u2019s Health & Mental Health)" },
+      { name: "Ashley Dalton MP", title: "PUSS (Public Health & Prevention)" },
+      { name: "Dr Zubir Ahmed MP", title: "PUSS (Health Innovation & Safety)" },
+    ],
+  },
+  {
+    id: "dfe", name: "Department for Education", shortName: "DfE", color: "#d4351c",
+    secretary: { name: "Bridget Phillipson MP", title: "Secretary of State for Education, Minister for Women & Equalities", rt: true },
+    mos: [
+      { name: "Georgia Gould OBE MP", title: "Minister of State (School Standards)", rt: false },
+      { name: "Baroness Smith of Malvern", title: "Minister of State (Women & Equalities / Skills)", rt: true },
+      { name: "Sir Stephen Timms MP", title: "Minister of State (Social Security & Disability)", rt: true },
+    ],
+    puss: [
+      { name: "Olivia Bailey MP", title: "PUSS (Early Education / Equalities)" },
+      { name: "Josh MacAlister OBE MP", title: "PUSS (Children & Families)" },
+      { name: "Seema Malhotra MP", title: "PUSS (Equalities)" },
+    ],
+  },
+  {
+    id: "desnz", name: "Department for Energy Security & Net Zero", shortName: "DESNZ", color: "#28a197",
+    secretary: { name: "Ed Miliband MP", title: "Secretary of State for Energy Security and Net Zero", rt: true },
+    mos: [
+      { name: "Lord Vallance", title: "Minister of State (Science, Innovation, Research & Nuclear)", rt: false },
+      { name: "Michael Shanks MP", title: "Minister of State (Energy)", rt: false },
+      { name: "Dr Alan Whitehead CBE", title: "Minister of State (Energy Security & Net Zero)", rt: false, note: "Unpaid" },
+    ],
+    puss: [
+      { name: "Katie White OBE MP", title: "PUSS (Climate)" },
+      { name: "Martin McCluskey MP", title: "PUSS (Energy Consumers)" },
+      { name: "Chris McDonald MP", title: "PUSS (Industry)" },
+    ],
+  },
+  {
+    id: "dwp", name: "Department for Work & Pensions", shortName: "DWP", color: "#003078",
+    secretary: { name: "Pat McFadden MP", title: "Secretary of State for Work and Pensions", rt: true },
+    mos: [
+      { name: "Sir Stephen Timms MP", title: "Minister of State (Social Security & Disability)", rt: true },
+      { name: "Dame Diana Johnson DBE MP", title: "Minister of State (Employment)", rt: true },
+      { name: "Baroness Smith of Malvern", title: "Minister of State (Skills)", rt: true },
+      { name: "Baroness Sherlock OBE", title: "Minister of State (Lords)", rt: false },
+    ],
+    puss: [
+      { name: "Andrew Western MP", title: "PUSS (Transformation)" },
+      { name: "Torsten Bell MP", title: "PUSS (Pensions)" },
+    ],
+  },
+  {
+    id: "dbt", name: "Department for Business & Trade", shortName: "DBT", color: "#1d70b8",
+    secretary: { name: "Peter Kyle MP", title: "Secretary of State for Business and Trade, President of the Board of Trade", rt: true },
+    mos: [
+      { name: "Lord Stockwood", title: "Minister of State (Investment)", rt: false, note: "Unpaid" },
+      { name: "Sir Chris Bryant MP", title: "Minister of State (Trade)", rt: false },
+    ],
+    puss: [
+      { name: "Blair McDougall MP", title: "PUSS (Small Business & Economic Transformation)" },
+      { name: "Kate Dearden MP", title: "PUSS (Employment Rights & Consumer Protection)" },
+      { name: "Baroness Lloyd of Effra CBE", title: "PUSS (Digital Economy)", note: "Paid as whip" },
+      { name: "Chris McDonald MP", title: "PUSS (Industry)" },
+    ],
+  },
+  {
+    id: "dsit", name: "Department for Science, Innovation & Technology", shortName: "DSIT", color: "#4c2c92",
+    secretary: { name: "Liz Kendall MP", title: "Secretary of State for Science, Innovation and Technology", rt: true },
+    mos: [
+      { name: "Lord Vallance", title: "Minister of State (Science, Innovation, Research & Nuclear)", rt: false },
+      { name: "Ian Murray MP", title: "Minister of State (Digital Government & Data)", rt: true },
+    ],
+    puss: [
+      { name: "Baroness Lloyd of Effra CBE", title: "PUSS (Digital Economy)", note: "Paid as whip" },
+      { name: "Kanishka Narayan MP", title: "PUSS (AI & Online Safety)" },
+    ],
+  },
+  {
+    id: "dft", name: "Department for Transport", shortName: "DfT", color: "#862633",
+    secretary: { name: "Heidi Alexander MP", title: "Secretary of State for Transport", rt: true },
+    mos: [
+      { name: "Lord Hendy of Richmond Hill CBE", title: "Minister of State (Rail)", rt: false, note: "Unpaid" },
+    ],
+    puss: [
+      { name: "Simon Lightwood MP", title: "PUSS (Roads & Buses)" },
+      { name: "Lilian Greenwood MP", title: "PUSS (Local Transport)" },
+      { name: "Keir Mather MP", title: "PUSS (Aviation, Maritime & Decarbonisation)" },
+    ],
+  },
+  {
+    id: "defra", name: "Department for Environment, Food & Rural Affairs", shortName: "Defra", color: "#00703c",
+    secretary: { name: "Emma Reynolds MP", title: "Secretary of State for Environment, Food and Rural Affairs", rt: false },
+    mos: [
+      { name: "Dame Angela Eagle DBE MP", title: "Minister of State (Food Security & Rural Affairs)", rt: false },
+    ],
+    puss: [
+      { name: "Emma Hardy MP", title: "PUSS (Water & Flooding)" },
+      { name: "Mary Creagh CBE MP", title: "PUSS (Nature)" },
+      { name: "Baroness Hayman of Ullock", title: "PUSS (Biosecurity, Borders & Animals)" },
+    ],
+  },
+  {
+    id: "dcms", name: "Department for Culture, Media & Sport", shortName: "DCMS", color: "#d4351c",
+    secretary: { name: "Lisa Nandy MP", title: "Secretary of State for Culture, Media and Sport", rt: true },
+    mos: [
+      { name: "Ian Murray MP", title: "Minister of State (Creative Industries, Media & Arts)", rt: true },
+    ],
+    puss: [
+      { name: "Stephanie Peacock MP", title: "PUSS (Sport, Tourism, Civil Society & Youth)" },
+      { name: "Baroness Twycross", title: "PUSS (Museums, Heritage & Gambling, Lords Minister)" },
+    ],
+  },
+  {
+    id: "nio", name: "Northern Ireland Office", shortName: "NIO", color: "#4c2c92",
+    secretary: { name: "Hilary Benn MP", title: "Secretary of State for Northern Ireland", rt: true },
+    mos: [],
+    puss: [{ name: "Matthew Patrick MP", title: "PUSS" }],
+  },
+  {
+    id: "scotland", name: "Scotland Office", color: "#0065bd",
+    secretary: { name: "Douglas Alexander MP", title: "Secretary of State for Scotland", rt: true },
+    mos: [],
+    puss: [{ name: "Kirsty McNeill MP", title: "PUSS" }],
+  },
+  {
+    id: "wales", name: "Wales Office", color: "#a33038",
+    secretary: { name: "Jo Stevens MP", title: "Secretary of State for Wales", rt: true },
+    mos: [],
+    puss: [{ name: "Nia Griffith MP", title: "PUSS" }],
+  },
+];
+
+const CROSS_CUTTING = [
+  { name: "Sir Alan Campbell MP", title: "Lord President of the Council, Leader of the House of Commons", rt: true, note: "Attends Cabinet" },
+  { name: "Baroness Smith of Basildon", title: "Lord Privy Seal, Leader of the House of Lords", rt: true },
+  { name: "Lord Hermer KC", title: "Attorney General", rt: true, note: "Attends Cabinet" },
+  { name: "Ellie Reeves MP", title: "Solicitor General", rt: true },
+];
+
+const LORDS_WHIPS = [
+  "Baroness Anderson of Stoke-on-Trent (Chief Whip, Lords)",
+  "Lord Collins of Highbury (Deputy Chief Whip, Lords)",
+  "Baroness Blake of Leeds", "Lord Katz", "Lord Lemos", "Lord Leong", "Lord Wilson of Sedgefield",
+];
+
+// ─── WEALTH ESTIMATES (£) ───────────────────────────────────────────
+// Sources: Register of Members' Financial Interests, Sunday Times Rich List,
+// published net worth estimates from finance/politics outlets, career background analysis.
+// These are ROUGH ESTIMATES for illustrative purposes — not audited figures.
+// Where no public estimate exists, we infer from: career background + declared property + years in Parliament.
+// "null" = insufficient data to estimate.
+const WEALTH_EST = {
+  // Cabinet
+  "Sir Keir Starmer KCB KC MP": 5500000,    // Former QC/DPP, London property
+  "David Lammy MP": 5000000,                 // Long-serving MP, media income, LBC
+  "Rachel Reeves MP": 2500000,               // Bank of England background, rental properties
+  "Yvette Cooper MP": 3000000,               // Long-serving, married to Ed Balls
+  "Shabana Mahmood MP": 1200000,             // Barrister background, MP since 2010
+  "Pat McFadden MP": 1500000,                // MP since 2005, political adviser background
+  "Darren Jones MP": 1000000,                // Solicitor background, MP since 2017
+  "John Healey MP": 1800000,                 // MP since 1997, long government career
+  "Wes Streeting MP": 800000,                // Younger MP, charity sector background
+  "Bridget Phillipson MP": 700000,           // MP since 2010, no known outside wealth
+  "Ed Miliband MP": 3500000,                 // Former party leader, family property
+  "Steve Reed OBE MP": 1000000,              // Council leader then MP since 2012
+  "Peter Kyle MP": 900000,                   // MP since 2015, academic background
+  "Liz Kendall MP": 1000000,                 // MP since 2010, adviser background
+  "Heidi Alexander MP": 800000,              // MP 2010-2020, returned 2024
+  "Emma Reynolds MP": 900000,                // MP 2010-2024, returned 2024
+  "Lisa Nandy MP": 1000000,                  // MP since 2010, think tank background
+  "Hilary Benn MP": 2000000,                 // MP since 1999, political family
+  "Douglas Alexander MP": 2000000,           // Former cabinet minister, advisory career between stints
+  "Jo Stevens MP": 1200000,                  // Solicitor background, MP since 2015
+  "Jonathan Reynolds MP": 1000000,           // MP since 2010, solicitor background
+  "Baroness Smith of Basildon": 1500000,     // Long-serving peer, ministerial career
+  // Also attends Cabinet
+  "Sir Alan Campbell MP": 1500000,           // MP since 1997, long whip career
+  "James Murray MP": 600000,                 // MP since 2019, younger
+  "Lord Hermer KC": 8000000,                 // Top commercial silk, Matrix Chambers
+  "Anna Turley MP": 600000,                  // MP 2015-2019, returned 2024
+  "Baroness Chapman of Darlington": 1200000, // Former MP, adviser
+  "Nick Thomas-Symonds MP": 1200000,         // Barrister/author, MP since 2015
+  // Treasury
+  "Lord Livermore": 1500000,                 // Political adviser, peer
+  "Lord Stockwood": 15000000,               // Tech entrepreneur, FTSE investor, Grimsby Town owner
+  "Daniel Tomlinson MP": 500000,             // Think tank economist, new MP 2024
+  "Lucy Rigby KC MP": 1500000,              // Barrister (KC), new MP 2024
+  "Torsten Bell MP": 800000,                // Resolution Foundation CEO, new MP 2024
+  // FCDO
+  "Stephen Doughty MP": 800000,             // MP since 2012
+  "Hamish Falconer MP": 600000,             // Diplomat background, new MP 2024
+  "Seema Malhotra MP": 1200000,             // Accountant/business, MP since 2012
+  "Chris Elmore MP": 700000,                // MP since 2016
+  // Home
+  "Dan Jarvis MBE MP": 1000000,             // Military then MP since 2011
+  "Lord Hanson of Flint": 1500000,          // MP 1992-2019, long ministerial career
+  "Sarah Jones MP": 800000,                 // MP since 2017
+  "Alex Norris MP": 600000,                 // MP since 2017
+  "Jess Phillips MP": 900000,               // MP since 2015, author/media
+  "Mike Tapp MP": 500000,                   // New MP 2024
+  // MoD
+  "Luke Pollard MP": 700000,                // MP since 2017
+  "Lord Coaker": 1500000,                   // MP 1997-2019, peer
+  "Alistair Carns DSO OBE MC MP": 600000,   // Military career, new MP 2024
+  "Louise Sandher-Jones MP": 500000,        // New MP 2024
+  // MoJ
+  "Lord Timpson OBE": 50000000,             // Timpson family business (father worth £400m)
+  "Sarah Sackman KC MP": 2000000,           // Barrister KC, new MP 2024
+  "Alex Davies-Jones MP": 600000,           // MP since 2019
+  "Baroness Levitt KC": 3000000,            // Senior barrister KC
+  "Jake Richards MP": 400000,               // New MP 2024
+  // MHCLG
+  "Matthew Pennycook MP": 700000,           // MP since 2015
+  "Alison McGovern MP": 800000,             // MP since 2015
+  "Baroness Taylor of Stevenage": 1200000,  // Council leader, peer
+  "Miatta Fahnbulleh MP": 500000,           // Think tank CEO, new MP 2024
+  "Samantha Dixon MBE MP": 700000,          // Council leader, new MP 2024
+  // DHSC
+  "Karin Smyth MP": 800000,                 // NHS manager, MP since 2015
+  "Stephen Kinnock MP": 2500000,            // WEF/business career, married to Danish PM
+  "Baroness Merron": 1200000,               // Former MP, peer
+  "Ashley Dalton MP": 500000,               // New MP 2023
+  "Dr Zubir Ahmed MP": 1500000,             // NHS surgeon, new MP 2024
+  // DfE
+  "Georgia Gould OBE MP": 800000,           // Council leader, daughter of Philip Gould
+  "Baroness Smith of Malvern": 1500000,     // Former Home Secretary
+  "Sir Stephen Timms MP": 1500000,          // MP since 1994
+  "Olivia Bailey MP": 400000,               // New MP 2024
+  "Josh MacAlister OBE MP": 600000,         // Social worker/charity, new MP 2024
+  // DESNZ
+  "Lord Vallance": 5000000,                 // Former GSK executive (president R&D), chief sci adviser
+  "Michael Shanks MP": 500000,              // New MP 2023
+  "Dr Alan Whitehead CBE": 1200000,         // Academic, former MP 1997-2024
+  "Katie White OBE MP": 500000,             // New MP 2024
+  "Martin McCluskey MP": 400000,            // New MP 2024
+  "Chris McDonald MP": 700000,              // Materials Processing Institute CEO
+  // DWP
+  "Dame Diana Johnson DBE MP": 1200000,     // MP since 2005
+  "Baroness Sherlock OBE": 1000000,         // Charity/public sector, peer
+  "Andrew Western MP": 500000,              // Council leader, new MP 2022
+  // DBT
+  "Sir Chris Bryant MP": 1200000,           // MP since 2001, author
+  "Blair McDougall MP": 500000,             // Campaign strategist, new MP 2024
+  "Kate Dearden MP": 400000,                // New MP 2024
+  "Baroness Lloyd of Effra CBE": 2000000,   // Former Blair adviser, public affairs career
+  // DSIT
+  "Ian Murray MP": 1200000,                 // MP since 2010
+  "Kanishka Narayan MP": 1500000,           // McKinsey consultant, new MP 2024
+  // DfT
+  "Lord Hendy of Richmond Hill CBE": 5000000, // Former TfL commissioner, Network Rail chair
+  "Simon Lightwood MP": 500000,             // New MP 2022
+  "Lilian Greenwood MP": 800000,            // MP since 2010
+  "Keir Mather MP": 300000,                 // Youngest MP, elected 2023
+  // Defra
+  "Dame Angela Eagle DBE MP": 1500000,      // MP since 1992
+  "Emma Hardy MP": 600000,                  // MP since 2017
+  "Mary Creagh CBE MP": 1000000,            // Former MP, returned 2024
+  "Baroness Hayman of Ullock": 1000000,     // Peer
+  // DCMS
+  "Stephanie Peacock MP": 600000,           // MP since 2017
+  "Baroness Twycross": 800000,              // Former London Assembly
+  // NIO/Scotland/Wales
+  "Matthew Patrick MP": 400000,             // New MP 2024
+  "Kirsty McNeill MP": 500000,              // Charity sector, new MP 2024
+  "Nia Griffith MP": 1000000,               // MP since 2005
+  // Law officers
+  "Ellie Reeves MP": 1500000,               // Solicitor, MP since 2017, sister of Rachel Reeves
+};
+
+// ─── CONSTITUENCY, MAJORITY & PARLIAMENT MEMBER ID ─────────────────
+// Constituency = 2024 boundaries. Majority = votes over 2nd place (2024 GE).
+// parlId = members.parliament.uk member ID for linking.
+// Lords members have no constituency/majority but may have parlId.
+const MP_INFO = {
+  "Sir Keir Starmer KCB KC MP": { con: "Holborn and St Pancras", maj: 11572, parlId: 4514 },
+  "David Lammy MP": { con: "Tottenham", maj: 19821, parlId: 1439 },
+  "Rachel Reeves MP": { con: "Leeds West and Pudsey", maj: 10824, parlId: 4031 },
+  "Yvette Cooper MP": { con: "Pontefract, Castleford and Knottingley", maj: 14639, parlId: 420 },
+  "Shabana Mahmood MP": { con: "Birmingham Ladywood", maj: 5703, parlId: 4000 },
+  "Pat McFadden MP": { con: "Wolverhampton South East", maj: 8761, parlId: 1587 },
+  "Darren Jones MP": { con: "Bristol North West", maj: 13204, parlId: 4621 },
+  "John Healey MP": { con: "Rawmarsh and Conisbrough", maj: 9821, parlId: 400 },
+  "Wes Streeting MP": { con: "Ilford North", maj: 528, parlId: 4504 },
+  "Bridget Phillipson MP": { con: "Houghton and Sunderland South", maj: 13788, parlId: 4046 },
+  "Ed Miliband MP": { con: "Doncaster North", maj: 9800, parlId: 1500 },
+  "Steve Reed OBE MP": { con: "Streatham and Croydon North", maj: 17327, parlId: 4268 },
+  "Peter Kyle MP": { con: "Hove and Portslade", maj: 16107, parlId: 4505 },
+  "Liz Kendall MP": { con: "Leicester West", maj: 6975, parlId: 4026 },
+  "Heidi Alexander MP": { con: "Swindon South", maj: 5765, parlId: 4038 },
+  "Emma Reynolds MP": { con: "Wycombe", maj: 5643, parlId: 4077 },
+  "Lisa Nandy MP": { con: "Wigan", maj: 14523, parlId: 4082 },
+  "Hilary Benn MP": { con: "Leeds South", maj: 16573, parlId: 413 },
+  "Douglas Alexander MP": { con: "Lothian East", maj: 8822, parlId: 1176 },
+  "Jo Stevens MP": { con: "Cardiff East", maj: 14875, parlId: 4425 },
+  "Jonathan Reynolds MP": { con: "Stalybridge and Hyde", maj: 10695, parlId: 4119 },
+  "Nick Thomas-Symonds MP": { con: "Torfaen", maj: 14380, parlId: 4479 },
+  "Dan Jarvis MBE MP": { con: "Barnsley North", maj: 8609, parlId: 4243 },
+  "Anna Turley MP": { con: "Redcar", maj: 9636, parlId: 4507 },
+  "James Murray MP": { con: "Ealing North", maj: 12060, parlId: 4797 },
+  "Chris Ward MP": { con: "Brighton Kemptown and Peacehaven", maj: 11119, parlId: 5047 },
+  "Satvir Kaur MP": { con: "Southampton Test", maj: 9671, parlId: 5048 },
+  "Josh Simons MP": { con: "Makerfield", maj: 10710, parlId: 5049 },
+  "Daniel Tomlinson MP": { con: "Chipping Barnet", maj: 2566, parlId: 5050 },
+  "Lucy Rigby KC MP": { con: "Northampton North", maj: 6135, parlId: 5051 },
+  "Torsten Bell MP": { con: "Swansea West", maj: 8703, parlId: 5052 },
+  "Stephen Doughty MP": { con: "Cardiff South and Penarth", maj: 13218, parlId: 4264 },
+  "Hamish Falconer MP": { con: "Lincoln", maj: 5270, parlId: 5053 },
+  "Seema Malhotra MP": { con: "Feltham and Heston", maj: 14015, parlId: 4253 },
+  "Chris Elmore MP": { con: "Bridgend", maj: 10420, parlId: 4572 },
+  "Sarah Jones MP": { con: "Croydon West", maj: 12838, parlId: 4631 },
+  "Alex Norris MP": { con: "Nottingham North and Kimberley", maj: 12558, parlId: 4641 },
+  "Jess Phillips MP": { con: "Birmingham Yardley", maj: 693, parlId: 4370 },
+  "Mike Tapp MP": { con: "Dover and Deal", maj: 4860, parlId: 5054 },
+  "Luke Pollard MP": { con: "Plymouth Sutton and Devonport", maj: 9389, parlId: 4682 },
+  "Alistair Carns DSO OBE MC MP": { con: "Birmingham Selly Oak", maj: 6723, parlId: 5055 },
+  "Louise Sandher-Jones MP": { con: "Wolverhampton North East", maj: 2377, parlId: 5056 },
+  "Sarah Sackman KC MP": { con: "Finchley and Golders Green", maj: 5765, parlId: 5057 },
+  "Alex Davies-Jones MP": { con: "Pontypridd", maj: 13560, parlId: 4849 },
+  "Jake Richards MP": { con: "Rother Valley", maj: 6792, parlId: 5058 },
+  "Matthew Pennycook MP": { con: "Greenwich and Woolwich", maj: 16745, parlId: 4520 },
+  "Alison McGovern MP": { con: "Birkenhead", maj: 14841, parlId: 4083 },
+  "Miatta Fahnbulleh MP": { con: "Peckham", maj: 25110, parlId: 5059 },
+  "Samantha Dixon MBE MP": { con: "Chester North and Neston", maj: 15103, parlId: 4960 },
+  "Karin Smyth MP": { con: "Bristol South", maj: 11804, parlId: 4444 },
+  "Stephen Kinnock MP": { con: "Aberafan Maesteg", maj: 12019, parlId: 4359 },
+  "Ashley Dalton MP": { con: "West Lancashire", maj: 12174, parlId: 4944 },
+  "Dr Zubir Ahmed MP": { con: "Glasgow South West", maj: 5565, parlId: 5060 },
+  "Georgia Gould OBE MP": { con: "Queen\u2019s Park and Maida Vale", maj: 19125, parlId: 5061 },
+  "Sir Stephen Timms MP": { con: "East Ham", maj: 13174, parlId: 163 },
+  "Olivia Bailey MP": { con: "Reading West and Mid Berkshire", maj: 6541, parlId: 5062 },
+  "Josh MacAlister OBE MP": { con: "Whitehaven and Workington", maj: 5283, parlId: 5063 },
+  "Michael Shanks MP": { con: "Rutherglen", maj: 10080, parlId: 4970 },
+  "Katie White OBE MP": { con: "Leeds North West", maj: 6700, parlId: 5064 },
+  "Martin McCluskey MP": { con: "Inverclyde and Renfrewshire West", maj: 7625, parlId: 5065 },
+  "Chris McDonald MP": { con: "Stockton North", maj: 12123, parlId: 5066 },
+  "Dame Diana Johnson DBE MP": { con: "Kingston upon Hull North and Cottingham", maj: 12356, parlId: 1533 },
+  "Andrew Western MP": { con: "Stretford and Urmston", maj: 14156, parlId: 4948 },
+  "Sir Chris Bryant MP": { con: "Rhondda and Ogmore", maj: 14787, parlId: 1446 },
+  "Blair McDougall MP": { con: "East Renfrewshire", maj: 8675, parlId: 5067 },
+  "Kate Dearden MP": { con: "Halifax", maj: 7376, parlId: 5068 },
+  "Ian Murray MP": { con: "Edinburgh South", maj: 11095, parlId: 3966 },
+  "Kanishka Narayan MP": { con: "Vale of Glamorgan", maj: 4032, parlId: 5069 },
+  "Simon Lightwood MP": { con: "Wakefield and Rothwell", maj: 10823, parlId: 4942 },
+  "Lilian Greenwood MP": { con: "Nottingham South", maj: 10127, parlId: 4029 },
+  "Keir Mather MP": { con: "Selby", maj: 4161, parlId: 4972 },
+  "Dame Angela Eagle DBE MP": { con: "Wallasey", maj: 12689, parlId: 491 },
+  "Emma Hardy MP": { con: "Kingston upon Hull West and Hessle", maj: 11207, parlId: 4645 },
+  "Mary Creagh CBE MP": { con: "Coventry East", maj: 11674, parlId: 1538 },
+  "Stephanie Peacock MP": { con: "Barnsley South", maj: 8980, parlId: 4607 },
+  "Matthew Patrick MP": { con: "Lewisham West and East Dulwich", maj: 19376, parlId: 5070 },
+  "Kirsty McNeill MP": { con: "Midlothian", maj: 5832, parlId: 5071 },
+  "Nia Griffith MP": { con: "Llanelli", maj: 9883, parlId: 1541 },
+  "Sir Alan Campbell MP": { con: "Tynemouth", maj: 17291, parlId: 328 },
+  "Ellie Reeves MP": { con: "Lewisham North", maj: 19854, parlId: 4620 },
+  // Lords (no constituency)
+  "Lord Hermer KC": { parlId: null },
+  "Lord Livermore": { parlId: null },
+  "Lord Stockwood": { parlId: null },
+  "Baroness Chapman of Darlington": { parlId: null },
+  "Lord Hanson of Flint": { parlId: null },
+  "Lord Coaker": { parlId: null },
+  "Lord Timpson OBE": { parlId: null },
+  "Baroness Levitt KC": { parlId: null },
+  "Baroness Taylor of Stevenage": { parlId: null },
+  "Baroness Merron": { parlId: null },
+  "Baroness Smith of Malvern": { parlId: null },
+  "Lord Vallance": { parlId: null },
+  "Dr Alan Whitehead CBE": { parlId: null },
+  "Baroness Sherlock OBE": { parlId: null },
+  "Baroness Lloyd of Effra CBE": { parlId: null },
+  "Lord Hendy of Richmond Hill CBE": { parlId: null },
+  "Baroness Hayman of Ullock": { parlId: null },
+  "Baroness Twycross": { parlId: null },
+  "Baroness Smith of Basildon": { parlId: null },
+};
+
+// ─── DEPARTMENTAL BUDGETS (Total DEL 2025-26, £bn) ────────────────
+// Source: HM Treasury Main Estimates 2025-26, OBR, House of Commons Library
+// Total DEL = Resource DEL excl. depreciation + Capital DEL
+const DEPT_BUDGET = {
+  "cabinet-office": 12.6,
+  "treasury": 48.0,       // HMT + HMRC together
+  "fcdo": 15.1,
+  "home": 19.6,
+  "mod": 56.6,
+  "moj": 11.8,
+  "mhclg": 37.4,
+  "dhsc": 201.7,
+  "dfe": 95.0,
+  "desnz": 10.9,
+  "dwp": 8.5,             // Admin DEL only; welfare AME ~£280bn extra
+  "dbt": 3.3,
+  "dsit": 10.4,
+  "dft": 29.8,
+  "defra": 7.3,
+  "dcms": 5.4,
+  "nio": 0.5,
+  "scotland": 0.1,        // Scotland Office only; block grant separate
+  "wales": 0.1,           // Wales Office only; block grant separate
+};
+
+// UK Wealth Percentile Calculation
+// Based on ONS Wealth and Assets Survey 2020-2022 and IFS analysis
+// Per-adult household wealth distribution (Great Britain)
+// Key thresholds (approximate, per adult):
+//   Bottom 9%: negative net wealth
+//   25th percentile: ~£15,000
+//   Median (50th): ~£104,000
+//   75th percentile: ~£340,000
+//   90th percentile: ~£530,000
+//   95th percentile: ~£700,000
+//   99th percentile: ~£1,900,000
+//   Top 0.1%: ~£5,000,000+
+const WEALTH_PERCENTILE_TABLE = [
+  [0, 0],
+  [15000, 25],
+  [50000, 40],
+  [104000, 50],
+  [200000, 65],
+  [340000, 75],
+  [430000, 85],
+  [530000, 90],
+  [700000, 95],
+  [1000000, 97],
+  [1400000, 98],
+  [1900000, 99],
+  [3500000, 99.5],
+  [5000000, 99.9],
+  [10000000, 99.95],
+  [50000000, 99.99],
+];
+
+function getPercentile(wealth) {
+  if (wealth == null) return null;
+  for (let i = WEALTH_PERCENTILE_TABLE.length - 1; i >= 0; i--) {
+    if (wealth >= WEALTH_PERCENTILE_TABLE[i][0]) return WEALTH_PERCENTILE_TABLE[i][1];
+  }
+  return 0;
+}
+
+function getPercentileClass(p) {
+  if (p == null) return "wb-unknown";
+  if (p >= 99) return "wb-top1";
+  if (p >= 95) return "wb-top5";
+  if (p >= 90) return "wb-top10";
+  if (p >= 75) return "wb-top25";
+  return "wb-top50";
+}
+
+function formatWealth(w) {
+  if (w == null) return "?";
+  if (w >= 10000000) return "\u00A3" + (w / 1000000).toFixed(0) + "m";
+  if (w >= 1000000) return "\u00A3" + (w / 1000000).toFixed(1) + "m";
+  return "\u00A3" + (w / 1000).toFixed(0) + "k";
+}
+
+function wealthBadgeHTML(name) {
+  if (!showWealth) return "";
+  const w = WEALTH_EST[name];
+  const p = getPercentile(w);
+  const cls = getPercentileClass(p);
+  const pLabel = p != null ? "Top " + parseFloat((100 - p).toFixed(2)) + "%" : "N/A";
+  const wLabel = formatWealth(w);
+  const title = p != null
+    ? "Est. wealth: " + wLabel + " \u2014 Wealthier than ~" + p + "% of UK adults (ONS data)"
+    : "Insufficient data for estimate";
+  return ' <span class="wealth-badge ' + cls + '" title="' + title + '"><span class="wb-icon">\u00A3</span>' + pLabel + '</span>';
+}
+
+function constituencyHTML(name) {
+  const info = MP_INFO[name];
+  if (!info || !info.con) return "";
+  const maj = info.maj;
+  let majClass = "majority-safe";
+  if (maj < 2000) majClass = "majority-vulnerable";
+  else if (maj < 6000) majClass = "majority-marginal";
+  const parlLink = info.parlId
+    ? `<a href="https://members.parliament.uk/member/${info.parlId}/contact" target="_blank" rel="noopener">${esc(info.con)}</a>`
+    : esc(info.con);
+  return `<div class="minister-constituency">${parlLink} &middot; <span class="${majClass}" title="2024 majority: ${maj.toLocaleString()} votes">maj. ${maj.toLocaleString()}</span></div>`;
+}
+
+// ─── STATE ──────────────────────────────────────────────────────────
+let expandedDepts = new Set(["cabinet-office", "treasury"]);
+let allExpanded = false;
+let showKey = true;
+let searchTerm = "";
+let showWealth = true;
+
+// ─── HELPERS ────────────────────────────────────────────────────────
+function esc(s) { const d = document.createElement("div"); d.textContent = s; return d.innerHTML; }
+
+function badgeHTML(note) {
+  if (!note) return "";
+  let cls = "whip";
+  if (note === "Unpaid") cls = "unpaid";
+  else if (note === "Attends Cabinet") cls = "cabinet";
+  return `<span class="badge ${cls}">${esc(note)}</span>`;
+}
+
+function ministerHTML(m, rank, color) {
+  const opacity = rank === "mos" ? "80" : rank === "puss" ? "50" : "";
+  return `<div class="minister-card ${rank}" style="border-left-color:${color}${opacity}">
+    <div class="minister-name">${m.rt ? '<span class="minister-rt">Rt Hon </span>' : ""}${esc(m.name)}${badgeHTML(m.note)}${wealthBadgeHTML(m.name)}</div>
+    <div class="minister-title">${esc(m.title)}</div>
+    ${constituencyHTML(m.name)}
+  </div>`;
+}
+
+function deptHTML(dept) {
+  const isOpen = expandedDepts.has(dept.id) || searchTerm.length > 0;
+  const total = 1 + dept.mos.length + dept.puss.length;
+  const displayName = dept.shortName || dept.name;
+  const fullNameLine = dept.shortName ? `<div class="dept-fullname">${esc(dept.name)}</div>` : "";
+  const budget = DEPT_BUDGET[dept.id];
+  const budgetLine = budget != null ? `<div class="dept-budget">\u00A3${budget}bn Total DEL 2025\u201326</div>` : "";
+
+  let body = "";
+  // Secretary
+  body += `<div class="rank-section"><div class="rank-label secretary" style="color:${dept.color}">Secretary of State</div>`;
+  body += ministerHTML(dept.secretary, "secretary", dept.color);
+  body += `</div>`;
+  // MoS
+  if (dept.mos.length) {
+    body += `<div class="rank-section"><div class="rank-label mos">Ministers of State</div>`;
+    dept.mos.forEach(m => body += ministerHTML(m, "mos", dept.color));
+    body += `</div>`;
+  }
+  // PUSS
+  if (dept.puss.length) {
+    body += `<div class="rank-section"><div class="rank-label puss">Parliamentary Under-Secretaries</div>`;
+    dept.puss.forEach(m => body += ministerHTML(m, "puss", dept.color));
+    body += `</div>`;
+  }
+
+  return `<div class="dept-block" data-id="${dept.id}">
+    <div class="dept-header" style="background:linear-gradient(135deg,${dept.color},${dept.color}dd)" onclick="toggleDept('${dept.id}')">
+      <div><div class="dept-name">${esc(displayName)}</div>${fullNameLine}${budgetLine}</div>
+      <div class="dept-meta">
+        <span class="dept-count">${total} ministers</span>
+        <span class="dept-arrow${isOpen ? " open" : ""}">\u25BE</span>
+      </div>
+    </div>
+    <div class="dept-body${isOpen ? " open" : ""}">${body}</div>
+  </div>`;
+}
+
+// ─── RENDER ─────────────────────────────────────────────────────────
+function render() {
+  const filtered = searchTerm
+    ? DEPARTMENTS.filter(d => {
+        const t = searchTerm.toLowerCase();
+        const all = [d.secretary, ...d.mos, ...d.puss].map(m => (m.name + " " + m.title).toLowerCase());
+        return d.name.toLowerCase().includes(t) || (d.shortName || "").toLowerCase().includes(t) || all.some(n => n.includes(t));
+      })
+    : DEPARTMENTS;
+
+  const totalMinisters = DEPARTMENTS.reduce((s, d) => s + 1 + d.mos.length + d.puss.length, 0);
+
+  let html = "";
+
+  // Header
+  html += `<div class="header">
+    <div class="header-row"><div class="crown-icon">\uD83D\uDC51</div><h1>His Majesty\u2019s Government</h1></div>
+    <p class="subtitle">UK Government Ministerial Structure \u2014 ${totalMinisters} ministerial posts across ${DEPARTMENTS.length} departments</p>
+    <p class="source">Source: GOV.UK \u2022 Data as of February 2026</p>
+  </div>`;
+
+  // Key
+  const keyRanks = [
+    { label: "1. Prime Minister", desc: "Head of Government, chairs Cabinet", color: "#1a1a2e" },
+    { label: "2. Secretary of State", desc: "Cabinet minister, heads department", color: "#333" },
+    { label: "3. Minister of State", desc: "Senior junior minister", color: "#555" },
+    { label: "4. Parl. Under-Secretary (PUSS)", desc: "Junior minister", color: "#777" },
+    { label: "5. Parl. Private Secretary (PPS)", desc: "Unpaid assistant, not a minister", color: "#999" },
+  ];
+  html += `<div class="key-box${showKey ? "" : " hidden"}" id="key-box">
+    <button class="close-btn" onclick="hideKey()">\u2715</button>
+    <div class="key-title">Ministerial Hierarchy</div>
+    <div class="key-items">${keyRanks.map(r => `<div class="key-item"><div class="key-dot" style="background:${r.color}"></div><span class="key-label" style="color:${r.color}">${r.label}</span><span class="key-desc">\u2014 ${r.desc}</span></div>`).join("")}</div>
+    <div class="key-footer">Whips operate in parallel \u2014 responsible for party discipline and vote management, not departmental policy. PPS are not formal ministers and are not shown.
+      <br>Majority colours: <span style="color:#065f46;font-weight:600">safe (6k+)</span> \u00B7 <span style="color:#b45309;font-weight:600">marginal (2k\u20136k)</span> \u00B7 <span style="color:#991b1b;font-weight:600">vulnerable (&lt;2k)</span>
+      \u00B7 Dept headers show Total DEL budget 2025\u201326 (HM Treasury Main Estimates).
+      \u00B7 Constituency names link to Parliament.uk member pages.
+    </div>
+  </div>`;
+
+  // Controls
+  html += `<div class="controls">
+    <input class="search-input" type="text" placeholder="Search ministers or departments\u2026" value="${esc(searchTerm)}" oninput="onSearch(this.value)">
+    <button class="ctrl-btn" onclick="toggleAll()">${allExpanded ? "Collapse All" : "Expand All"}</button>
+    <button class="ctrl-btn wealth-toggle" onclick="toggleWealth()" style="${showWealth ? 'background:#fef3c7;border-color:#fde68a;color:#92400e' : ''}">\u00A3 Wealth ${showWealth ? "ON" : "OFF"}</button>
+    ${!showKey ? '<button class="ctrl-btn" onclick="showKeyBox()">Show Key</button>' : ""}
+  </div>`;
+
+  // Wealth note
+  if (showWealth) {
+    html += `<div class="wealth-note-box">
+      <strong>\u26A0 Wealth Percentile Estimates</strong> \u2014 Badges show each minister\u2019s estimated position in the UK adult wealth distribution 
+      (ONS Wealth & Assets Survey 2020\u201322, IFS analysis). Estimates are compiled from published net worth reports, Register of Members\u2019 Financial Interests, 
+      career backgrounds, and property data. These are <strong>rough approximations</strong>, not audited figures. Hover badges for detail.
+      <br><span style="font-size:10px;opacity:0.8">UK median adult wealth \u2248 \u00A3104k. Top 5% \u2248 \u00A3700k+. Top 1% \u2248 \u00A31.9m+. Top 0.1% \u2248 \u00A35m+.</span>
+    </div>`;
+  }
+
+  // PM
+  html += `<div class="pm-card">
+    <div class="pm-label">Prime Minister</div>
+    <div class="pm-name">The Rt Hon Sir Keir Starmer KCB KC MP${showWealth ? (() => { const w = WEALTH_EST["Sir Keir Starmer KCB KC MP"]; const p = getPercentile(w); return ' <span class="wealth-badge wb-top1" style="font-size:11px;padding:3px 8px" title="Est. wealth: ' + formatWealth(w) + ' — Wealthier than ~' + p + '% of UK adults">\u00A3 Top ' + parseFloat((100-p).toFixed(2)) + '%</span>'; })() : ""}</div>
+    <div class="pm-titles">First Lord of the Treasury \u00B7 Minister for the Civil Service \u00B7 Minister for the Union</div>
+    <div class="minister-constituency" style="text-align:center;margin-top:4px"><a href="https://members.parliament.uk/member/4514/contact" target="_blank" rel="noopener" style="color:rgba(255,255,255,0.85)">Holborn and St Pancras</a> &middot; <span style="color:rgba(255,255,255,0.75)">maj. 11,572</span></div>
+  </div>`;
+
+  // Cross-cutting
+  html += `<div class="cross-box">
+    <div class="section-title">Cross-Cutting & Law Officers</div>
+    <div class="cross-grid">${CROSS_CUTTING.map(m => ministerHTML(m, "mos", "#1a1a2e")).join("")}</div>
+  </div>`;
+
+  // Departments
+  html += `<div class="dept-grid">${filtered.map(d => deptHTML(d)).join("")}</div>`;
+
+  // Whips
+  html += `<div class="whips-box">
+    <div class="section-title">Government Whips \u2014 Party Discipline & Parliamentary Business</div>
+    <div class="whips-grid">
+      <div>
+        <div class="whip-column-title">House of Commons</div>
+        ${ministerHTML({ name: "Jonathan Reynolds MP", title: "Parliamentary Secretary to the Treasury (Chief Whip)", rt: true }, "secretary", "#1a1a2e")}
+        ${ministerHTML({ name: "Sir Nic Dakin MP", title: "Vice Chamberlain of HM Household (Deputy Chief Whip)", rt: false }, "mos", "#1a1a2e")}
+        <div class="whip-note">Plus Lords Commissioners of the Treasury and Assistant Whips</div>
+      </div>
+      <div>
+        <div class="whip-column-title">House of Lords</div>
+        ${LORDS_WHIPS.map((w, i) => `<div class="lords-whip ${i < 2 ? "senior" : "junior"}">${esc(w)}</div>`).join("")}
+      </div>
+    </div>
+  </div>`;
+
+  // Footer
+  html += `<div class="footer">
+    Data sourced from GOV.UK/government/ministers and Hansard (January\u2013February 2026).
+    Some ministers serve across multiple departments (e.g. Lord Vallance, Baroness Smith of Malvern, Chris McDonald MP).
+    Parliamentary Private Secretaries are not formal ministers and are omitted from this chart.
+    <br>Note: \u201CPaid as whip\u201D = minister holds a dual departmental/whip appointment. \u201CUnpaid\u201D = serves without ministerial salary.
+    <br>Wealth estimates: compiled from published reports, Register of Members\u2019 Financial Interests, career data, and ONS Wealth & Assets Survey 2020\u201322 percentiles. Not audited.
+    <br>Constituency majorities: 2024 General Election results (House of Commons Library). Budget data: HM Treasury Main Estimates 2025\u201326.
+  </div>`;
+
+  document.getElementById("app").innerHTML = html;
+}
+
+// ─── EVENT HANDLERS ─────────────────────────────────────────────────
+function toggleDept(id) {
+  if (expandedDepts.has(id)) expandedDepts.delete(id); else expandedDepts.add(id);
+  render();
+}
+
+function toggleAll() {
+  if (allExpanded) { expandedDepts.clear(); } else { DEPARTMENTS.forEach(d => expandedDepts.add(d.id)); }
+  allExpanded = !allExpanded;
+  render();
+}
+
+function hideKey() { showKey = false; render(); }
+function showKeyBox() { showKey = true; render(); }
+function onSearch(val) { searchTerm = val; render(); }
+function toggleWealth() { showWealth = !showWealth; render(); }
+
+// ─── INIT ───────────────────────────────────────────────────────────
+render();
+</script>
+</body>
+</html>
